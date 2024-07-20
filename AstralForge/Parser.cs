@@ -1,14 +1,13 @@
-using System;
-using System.Collections.Generic;
 using AstralForge.Commands;
 using AstralForge.Enums;
+using AstralForge.Extensions;
 using AstralForge.Models;
 
 namespace AstralForge;
 
 public class Parser
 {
-    private static readonly Dictionary<string, Func<List<Token>, ICommand>> CommandParsers = new()
+    public static readonly Dictionary<string, Func<List<Token>, ICommand>> CommandParsers = new()
     {
         { "STOCKS", tokens => new StockCommand() },
         { "NEEDED_STOCKS", tokens => new NeededStocksCommand(ParseOrderTokens(tokens)) },
@@ -36,7 +35,25 @@ public class Parser
             return commandParser(tokens);
         }
 
+        var closestCommand = GetClosestCommand(commandToken.Value);
+        Console.WriteLine(closestCommand);
+        if (closestCommand != null)
+        {
+            throw new ArgumentException($"Unknown command: {commandToken.Value}. Did you mean '{closestCommand}'?");
+        }
+
         throw new ArgumentException($"Unknown command: {commandToken.Value}");
+    }
+
+    private static string? GetClosestCommand(string input)
+    {
+        var threshold = 3;
+        var closestCommand = CommandParsers.Keys
+            .Select(command => new { Command = command, Distance = command.LevenshteinDistance(input) })
+            .Where(x => x.Distance <= threshold)
+            .OrderBy(x => x.Distance)
+            .FirstOrDefault();
+        return closestCommand?.Command;
     }
 
     private static Dictionary<string, int> ParseOrderTokens(List<Token> tokens)
@@ -92,20 +109,9 @@ public class Parser
 
     private static PartType GetPartType(string name)
     {
-        if (name.Contains("Engine"))
-        {
-            return PartType.Engine;
-        }
-        if (name.Contains("Wings"))
-        {
-            return PartType.Wings;
-        }
-        if (name.Contains("Thruster"))
-        {
-            return PartType.Thruster;
-        }
-        
-        // TODO: When no match is found, throw an exception instead of returning Hull
-        return PartType.Hull;
+        return name.Contains("Engine") ? PartType.Engine :
+               name.Contains("Wings") ? PartType.Wings :
+               name.Contains("Thruster") ? PartType.Thruster :
+               PartType.Hull;
     }
 }

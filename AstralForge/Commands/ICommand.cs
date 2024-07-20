@@ -5,5 +5,5 @@ namespace AstralForge.Commands;
 public interface ICommand
 {
     void Execute(Inventory inventory);
+    void ShowUsage();
 }
-

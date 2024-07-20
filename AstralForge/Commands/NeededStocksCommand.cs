@@ -15,5 +15,11 @@ public class NeededStocksCommand : ICommand
     {
         Console.WriteLine(inventory.GetNeededStocks(_order));
     }
-}
 
+    public void ShowUsage()
+    {
+        Console.WriteLine("Usage: NEEDED_STOCKS A Vaisseau1, B Vaisseau2, ...");
+        Console.WriteLine("Example: NEEDED_STOCKS 2 Explorer, 1 Speeder");
+        Console.WriteLine("Description: Displays the parts required to produce the specified quantities of spaceships.");
+    }
+}

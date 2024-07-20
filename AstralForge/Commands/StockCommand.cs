@@ -8,5 +8,10 @@ public class StockCommand : ICommand
     {
         Console.WriteLine(inventory.GetStock());
     }
-}
 
+    public void ShowUsage()
+    {
+        Console.WriteLine("Usage: STOCKS");
+        Console.WriteLine("Description: Displays the current stock of parts and spaceships in the inventory.");
+    }
+}
