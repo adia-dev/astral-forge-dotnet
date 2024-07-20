@@ -45,7 +45,7 @@ public class Parser
         throw new ArgumentException($"Unknown command: {commandToken.Value}");
     }
 
-    private static string? GetClosestCommand(string input)
+    public static string? GetClosestCommand(string input)
     {
         var threshold = 3;
         var closestCommand = CommandParsers.Keys

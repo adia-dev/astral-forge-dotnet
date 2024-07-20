@@ -1,8 +1,5 @@
-using System.CommandLine;
-using System.CommandLine.NamingConventionBinder;
 using AstralForge.Commands;
 using AstralForge.Enums;
-using AstralForge.Extensions;
 using AstralForge.Models;
 
 namespace AstralForge
@@ -27,38 +24,16 @@ namespace AstralForge
             var lexer = new Lexer();
             var parser = new Parser();
 
-            var rootCommand = new RootCommand
+            if (args.Length > 0)
             {
-                new Argument<string>("input", "Enter the command to execute")
-            };
-
-            rootCommand.Handler = CommandHandler.Create<string>(input =>
+                var cli = new CLI(inventory, lexer, parser);
+                cli.Run(args);
+            }
+            else
             {
-                try
-                {
-                    var tokens = lexer.Tokenize(input);
-                    var command = parser.Parse(tokens);
-                    command.Execute(inventory);
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine($"Error: {ex.Message}");
-                    if (CommandParsers.TryGetValue(input.Split(' ')[0].ToUpper(), out var commandParser))
-                    {
-                        commandParser(new List<Token>()).ShowUsage();
-                    }
-                    else
-                    {
-                        var closestCommand = GetClosestCommand(input.Split(' ')[0]);
-                        if (closestCommand != null)
-                        {
-                            Console.WriteLine($"Did you mean '{closestCommand}'?");
-                        }
-                    }
-                }
-            });
-
-            rootCommand.Invoke(args);
+                var repl = new REPL(inventory, lexer, parser);
+                repl.Start();
+            }
         }
 
         private static void AddInitialStock(Inventory inventory)
@@ -75,17 +50,6 @@ namespace AstralForge
             inventory.AddPart(PartType.Thruster, "Thruster_TE1", 10);
             inventory.AddPart(PartType.Thruster, "Thruster_TS1", 20);
             inventory.AddPart(PartType.Thruster, "Thruster_TC1", 10);
-        }
-
-        private static string GetClosestCommand(string input)
-        {
-            var threshold = 3;
-            var closestCommand = CommandParsers.Keys
-                .Select(command => new { Command = command, Distance = command.LevenshteinDistance(input) })
-                .Where(x => x.Distance <= threshold)
-                .OrderBy(x => x.Distance)
-                .FirstOrDefault();
-            return closestCommand?.Command;
         }
 
         private static Dictionary<string, int> ParseOrderTokens(List<Token> tokens)
@@ -142,9 +106,9 @@ namespace AstralForge
         private static PartType GetPartType(string name)
         {
             return name.Contains("Engine") ? PartType.Engine :
-                name.Contains("Wings") ? PartType.Wings :
-                name.Contains("Thruster") ? PartType.Thruster :
-                PartType.Hull;
+                   name.Contains("Wings") ? PartType.Wings :
+                   name.Contains("Thruster") ? PartType.Thruster :
+                   PartType.Hull;
         }
     }
 }
