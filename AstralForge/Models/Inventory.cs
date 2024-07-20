@@ -83,4 +83,27 @@ public class Inventory
 
         return neededStocksReport.ToString();
     }
+
+    public string GetAssemblyInstructions(Dictionary<string, int> order)
+    {
+        var instructions = new StringBuilder();
+
+        foreach (var item in order)
+        {
+            var spaceship = SpaceshipFactory.CreateSpaceship(item.Key);
+            for (int i = 0; i < item.Value; i++)
+            {
+                instructions.AppendLine($"PRODUCING {item.Key}");
+
+                foreach (var part in spaceship.PartsRequirements)
+                {
+                    instructions.AppendLine($"GET_OUT_STOCK {part.Quantity} {part.Name}");
+                }
+
+                instructions.AppendLine($"FINISHED {item.Key}");
+            }
+        }
+
+        return instructions.ToString();
+    }
 }

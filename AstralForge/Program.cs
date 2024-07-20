@@ -33,7 +33,11 @@ public static class Program
         Console.WriteLine("Stock");
         Console.WriteLine(inventory.GetStock());
 
+        var order = new Dictionary<string, int> { { "Explorer", 1 } };
         Console.WriteLine("Neeeded Stock for an Explorer:");
-        Console.WriteLine(inventory.GetNeededStocks(new Dictionary<string, int> { { "Explorer", 1 } }));
+        Console.WriteLine(inventory.GetNeededStocks(order));
+
+        Console.WriteLine("Assembly Instructions:");
+        Console.WriteLine(inventory.GetAssemblyInstructions(order));
     }
 }
