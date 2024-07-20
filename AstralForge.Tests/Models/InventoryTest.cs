@@ -67,5 +67,28 @@ namespace AstralForge.Tests
             Assert.That(stockReport, Does.Contain("Hull - Hull_HE1: 10"));
             Assert.That(stockReport, Does.Contain("Explorer"));
         }
+
+        [Test]
+        public void GetNeededStocks_ShouldReturnCorrectRequiredParts()
+        {
+            // Arrange
+            var inventory = new Inventory();
+            var order = new Dictionary<string, int> { { "Explorer", 1 } };
+
+            // Act
+            var neededStocks = inventory.GetNeededStocks(order);
+
+            // Assert
+            Assert.That(neededStocks, Does.Contain("1 Explorer:"));
+            Assert.That(neededStocks, Does.Contain("1 Hull_HE1"));
+            Assert.That(neededStocks, Does.Contain("1 Engine_EE1"));
+            Assert.That(neededStocks, Does.Contain("2 Wings_WE1"));
+            Assert.That(neededStocks, Does.Contain("1 Thruster_TE1"));
+            Assert.That(neededStocks, Does.Contain("Total:"));
+            Assert.That(neededStocks, Does.Contain("1 Hull_HE1"));
+            Assert.That(neededStocks, Does.Contain("1 Engine_EE1"));
+            Assert.That(neededStocks, Does.Contain("2 Wings_WE1"));
+            Assert.That(neededStocks, Does.Contain("1 Thruster_TE1"));
+        }
     }
 }
