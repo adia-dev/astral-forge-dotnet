@@ -106,4 +106,61 @@ public class Inventory
 
         return instructions.ToString();
     }
+
+    public string VerifyOrder(Dictionary<string, int> order)
+    {
+        foreach (var item in order)
+        {
+            if (!CheckSpaceshipOrder(item.Key, item.Value))
+            {
+                return "UNAVAILABLE";
+            }
+        }
+
+        return "AVAILABLE";
+    }
+
+    public string ProduceOrder(Dictionary<string, int> order)
+    {
+        foreach (var item in order)
+        {
+            if (!CheckSpaceshipOrder(item.Key, item.Value))
+            {
+                return $"ERROR Not enough parts to fulfill the order for {item.Value} {item.Key}(s).";
+            }
+        }
+
+        foreach (var item in order)
+        {
+            CompleteSpaceshipOrder(item.Key, item.Value);
+        }
+
+        return "STOCK_UPDATED";
+    }
+
+    private bool CheckSpaceshipOrder(string name, int quantity)
+    {
+        var spaceship = SpaceshipFactory.CreateSpaceship(name);
+        foreach (var part in spaceship.PartsRequirements)
+        {
+            if (!parts.ContainsKey(part.Name) || parts[part.Name].Quantity < part.Quantity * quantity)
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private void CompleteSpaceshipOrder(string name, int quantity)
+    {
+        var spaceship = SpaceshipFactory.CreateSpaceship(name);
+        foreach (var part in spaceship.PartsRequirements)
+        {
+            if (parts.ContainsKey(part.Name))
+            {
+                parts[part.Name] = new Part(part.Type, part.Name, parts[part.Name].Quantity - part.Quantity * quantity);
+            }
+        }
+        AddSpaceship(name, quantity);
+    }
 }
