@@ -13,7 +13,8 @@ public class Lexer
         { "INSTRUCTIONS", TokenType.Command },
         { "VERIFY", TokenType.Command },
         { "PRODUCE", TokenType.Command },
-        { "RECEIVE", TokenType.Command }
+        { "RECEIVE", TokenType.Command },
+        { "HELP", TokenType.Command }
     };
 
     public List<Token> Tokenize(string input)

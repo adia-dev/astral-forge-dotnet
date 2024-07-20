@@ -50,6 +50,7 @@ namespace AstralForge
                 {
                     Console.ForegroundColor = ConsoleColor.Yellow;
                     Console.WriteLine($"Input error: {ex.Message}");
+                    HandleClosestCommandSuggestion(input);
                     Console.ResetColor();
                 }
                 catch (Exception ex)
@@ -87,6 +88,16 @@ namespace AstralForge
             else
             {
                 Console.WriteLine("Usage: help [command]");
+            }
+        }
+
+        private void HandleClosestCommandSuggestion(string input)
+        {
+            var commandName = input.Split(' ')[0].ToUpper();
+            var closestCommand = Parser.GetClosestCommand(commandName);
+            if (closestCommand != null)
+            {
+                Console.WriteLine($"Did you mean '{closestCommand}'?");
             }
         }
     }

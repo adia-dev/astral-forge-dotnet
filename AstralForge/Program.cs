@@ -13,7 +13,8 @@ namespace AstralForge
             { "INSTRUCTIONS", tokens => new AssemblyInstructionsCommand(ParseOrderTokens(tokens)) },
             { "VERIFY", tokens => new VerifyCommand(ParseOrderTokens(tokens)) },
             { "PRODUCE", tokens => new ProduceCommand(ParseOrderTokens(tokens)) },
-            { "RECEIVE", tokens => new ReceiveCommand(ParsePartsTokens(tokens)) }
+            { "RECEIVE", tokens => new ReceiveCommand(ParsePartsTokens(tokens)) },
+            { "HELP", tokens => new HelpCommand(tokens) } // Add help command
         };
 
         public static void Main(string[] args)
