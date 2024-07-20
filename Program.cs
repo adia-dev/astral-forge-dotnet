@@ -24,14 +24,11 @@ public static class Program
         inventory.AddPart(PartType.Thruster, "Thruster_TS1", 20);
         inventory.AddPart(PartType.Thruster, "Thruster_TC1", 10);
 
-        inventory.PrintStock();
+        Console.WriteLine(inventory.GetStock());
 
         inventory.AddSpaceship("Explorer", 2);
         inventory.AddSpaceship("Speeder", 1);
 
-        inventory.PrintStock();
-
-        var canBuild = inventory.CheckSpaceshipOrder("Speeder", 1);
-        Console.WriteLine($"Can build 1 Speeder: {canBuild}");
+        Console.WriteLine(inventory.GetStock());
     }
 }

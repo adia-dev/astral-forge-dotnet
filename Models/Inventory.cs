@@ -1,3 +1,4 @@
+using System.Text;
 using AstralForge.Enums;
 using AstralForge.Factories;
 
@@ -5,20 +6,18 @@ namespace AstralForge.Models;
 
 public class Inventory
 {
-    private readonly List<Part> parts = new();
+    private readonly Dictionary<string, Part> parts = new();
     private readonly List<Spaceship> spaceships = new();
 
     public void AddPart(PartType type, string name, int quantity)
     {
-        var part = parts.FirstOrDefault(p => p.Name == name);
-        if (part != null)
+        if (parts.ContainsKey(name))
         {
-            parts.Remove(part);
-            parts.Add(new Part(type, name, part.Quantity + quantity));
+            parts[name] = new Part(type, name, parts[name].Quantity + quantity);
         }
         else
         {
-            parts.Add(new Part(type, name, quantity));
+            parts[name] = new Part(type, name, quantity);
         }
     }
 
@@ -30,35 +29,23 @@ public class Inventory
         }
     }
 
-    public void PrintStock()
+    public string GetStock()
     {
-        Console.WriteLine("Parts in stock:");
-        foreach (var part in parts)
+        var stockReport = new StringBuilder();
+
+        stockReport.AppendLine("Parts in stock:");
+        foreach (var part in parts.Values)
         {
-            Console.WriteLine($"{part.Type} - {part.Name}: {part.Quantity}");
+            stockReport.AppendLine($"{part.Type} - {part.Name}: {part.Quantity}");
         }
 
-        Console.WriteLine("Spaceships in stock:");
+        stockReport.AppendLine();
+        stockReport.AppendLine("Spaceships in stock:");
         foreach (var spaceship in spaceships)
         {
-            Console.WriteLine($"{spaceship.Name}");
-        }
-    }
-
-    public bool CheckSpaceshipOrder(string name, int quantity)
-    {
-        var spaceship = SpaceshipFactory.CreateSpaceship(name);
-        var requiredParts = spaceship.PartsRequirements;
-
-        foreach (var part in requiredParts)
-        {
-            var availablePart = parts.FirstOrDefault(p => p.Name == part.Name);
-            if (availablePart == null || availablePart.Quantity < part.Quantity * quantity)
-            {
-                return false;
-            }
+            stockReport.AppendLine($"{spaceship.Name}");
         }
 
-        return true;
+        return stockReport.ToString();
     }
 }
