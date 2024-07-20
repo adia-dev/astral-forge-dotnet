@@ -8,9 +8,32 @@ public static class Program
     public static void Main(string[] args)
     {
         Console.WriteLine("Welcome to the spaceship factory!");
-
         var inventory = new Inventory();
+        AddInitialStock(inventory);
+        var lexer = new Lexer();
+        var parser = new Parser();
 
+        while (true)
+        {
+            Console.WriteLine("Enter command:");
+            var input = Console.ReadLine();
+            if (input == null) continue;
+
+            try
+            {
+                var tokens = lexer.Tokenize(input);
+                var command = parser.Parse(tokens);
+                command.Execute(inventory);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error: {ex.Message}");
+            }
+        }
+    }
+
+    private static void AddInitialStock(Inventory inventory)
+    {
         inventory.AddPart(PartType.Hull, "Hull_HE1", 10);
         inventory.AddPart(PartType.Hull, "Hull_HS1", 10);
         inventory.AddPart(PartType.Hull, "Hull_HC1", 10);
@@ -23,30 +46,5 @@ public static class Program
         inventory.AddPart(PartType.Thruster, "Thruster_TE1", 10);
         inventory.AddPart(PartType.Thruster, "Thruster_TS1", 20);
         inventory.AddPart(PartType.Thruster, "Thruster_TC1", 10);
-
-        Console.WriteLine("Stock");
-        Console.WriteLine(inventory.GetStock());
-
-        inventory.AddSpaceship("Explorer", 2);
-        inventory.AddSpaceship("Speeder", 1);
-
-        Console.WriteLine("Stock");
-        Console.WriteLine(inventory.GetStock());
-
-        var order = new Dictionary<string, int> { { "Explorer", 1 } };
-        Console.WriteLine("Needed Stock for an Explorer:");
-        Console.WriteLine(inventory.GetNeededStocks(order));
-
-        Console.WriteLine("Assembly Instructions:");
-        Console.WriteLine(inventory.GetAssemblyInstructions(order));
-        
-        Console.WriteLine("Verify Order:");
-        Console.WriteLine(inventory.VerifyOrder(order));
-        
-        Console.WriteLine("Produce Order:");
-        Console.WriteLine(inventory.ProduceOrder(order));
-
-        Console.WriteLine("Verify Order:");
-        Console.WriteLine(inventory.VerifyOrder(order));
     }
 }
