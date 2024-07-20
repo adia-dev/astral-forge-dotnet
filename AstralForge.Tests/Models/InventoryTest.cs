@@ -90,5 +90,27 @@ namespace AstralForge.Tests
             Assert.That(neededStocks, Does.Contain("2 Wings_WE1"));
             Assert.That(neededStocks, Does.Contain("1 Thruster_TE1"));
         }
+
+        [Test]
+        public void GetAssemblyInstructions_ShouldReturnCorrectInstructions()
+        {
+            // Arrange
+            var inventory = new Inventory();
+            var order = new Dictionary<string, int>
+            {
+                { "Explorer", 1 }
+            };
+
+            // Act
+            var instructions = inventory.GetAssemblyInstructions(order);
+
+            // Assert
+            Assert.That(instructions, Does.Contain("PRODUCING Explorer"));
+            Assert.That(instructions, Does.Contain("GET_OUT_STOCK 1 Hull_HE1"));
+            Assert.That(instructions, Does.Contain("GET_OUT_STOCK 1 Engine_EE1"));
+            Assert.That(instructions, Does.Contain("GET_OUT_STOCK 2 Wings_WE1"));
+            Assert.That(instructions, Does.Contain("GET_OUT_STOCK 1 Thruster_TE1"));
+            Assert.That(instructions, Does.Contain("FINISHED Explorer"));
+        }
     }
 }
