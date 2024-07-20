@@ -24,11 +24,16 @@ public static class Program
         inventory.AddPart(PartType.Thruster, "Thruster_TS1", 20);
         inventory.AddPart(PartType.Thruster, "Thruster_TC1", 10);
 
+        Console.WriteLine("Stock");
         Console.WriteLine(inventory.GetStock());
 
         inventory.AddSpaceship("Explorer", 2);
         inventory.AddSpaceship("Speeder", 1);
 
+        Console.WriteLine("Stock");
         Console.WriteLine(inventory.GetStock());
+
+        Console.WriteLine("Neeeded Stock for an Explorer:");
+        Console.WriteLine(inventory.GetNeededStocks(new Dictionary<string, int> { { "Explorer", 1 } }));
     }
 }

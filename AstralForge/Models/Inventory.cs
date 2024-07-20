@@ -48,4 +48,39 @@ public class Inventory
 
         return stockReport.ToString();
     }
+
+    public string GetNeededStocks(Dictionary<string, int> order)
+    {
+        var neededStocksReport = new StringBuilder();
+
+        var totalParts = new Dictionary<string, Part>();
+
+        foreach (var item in order)
+        {
+            var spaceship = SpaceshipFactory.CreateSpaceship(item.Key);
+            neededStocksReport.AppendLine($"{item.Value} {item.Key}:");
+
+            foreach (var part in spaceship.PartsRequirements)
+            {
+                var totalQuantity = part.Quantity * item.Value;
+                if (totalParts.ContainsKey(part.Name))
+                {
+                    totalParts[part.Name] = new Part(part.Type, part.Name, totalParts[part.Name].Quantity + totalQuantity);
+                }
+                else
+                {
+                    totalParts[part.Name] = new Part(part.Type, part.Name, totalQuantity);
+                }
+                neededStocksReport.AppendLine($"{totalQuantity} {part.Name}");
+            }
+        }
+
+        neededStocksReport.AppendLine("Total:");
+        foreach (var part in totalParts.Values)
+        {
+            neededStocksReport.AppendLine($"{part.Quantity} {part.Name}");
+        }
+
+        return neededStocksReport.ToString();
+    }
 }
