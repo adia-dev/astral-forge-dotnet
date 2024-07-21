@@ -18,6 +18,7 @@ namespace AstralForge
             { "RECEIVE", tokens => new ReceiveCommand(ParsePartsTokens(tokens)) },
             { "SEND", tokens => new SendCommand(ParseOrderTokens(tokens)) },
             { "GET_MOVEMENTS", tokens => new GetMovementsCommand() },
+            { "ADD_TEMPLATE", tokens => new AddTemplateCommand(tokens[0], ParseAddTemplateTokens(tokens)) },
             { "HELP", tokens => new HelpCommand(tokens) } // Add help command
         };
 
@@ -69,6 +70,12 @@ namespace AstralForge
             inventory.AddPart(PartType.Thruster, "Thruster_TE1", 10);
             inventory.AddPart(PartType.Thruster, "Thruster_TS1", 20);
             inventory.AddPart(PartType.Thruster, "Thruster_TC1", 10);
+        }
+
+        // ADD_TEMPLATE TEMPLATE_NAME, Piece1, […], PieceN
+        private static List<Part> ParseAddTemplateTokens(List<Token> tokens)
+        {
+            return ParsePartsTokens(tokens.GetRange(2, tokens.Count - 1));
         }
 
         private static Dictionary<string, int> ParseOrderTokens(List<Token> tokens)

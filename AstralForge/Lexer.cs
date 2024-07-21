@@ -16,7 +16,8 @@ public class Lexer
         { "RECEIVE", TokenType.Command },
         { "SEND", TokenType.Command },
         { "GET_MOVEMENTS", TokenType.Command },
-        { "HELP", TokenType.Command }
+        { "HELP", TokenType.Command },
+        { "ADD_TEMPLATE", TokenType.Command }
     };
 
     public List<Token> Tokenize(string input)

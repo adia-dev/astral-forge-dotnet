@@ -16,6 +16,7 @@ namespace AstralForge.Models
         private readonly Dictionary<string, Part> parts = new();
         private readonly List<Spaceship> spaceships = new();
         private readonly List<string> movements = new();
+        private readonly Dictionary<string, List<Part>> customSpaceshipTemplates = new();
 
         public void AddPart(PartType type, string name, int quantity)
         {
@@ -59,6 +60,16 @@ namespace AstralForge.Models
             AddMovement($"Added {quantity} {name}");
         }
 
+        public string AddTemplate(string templateName, List<Part> part)
+        {
+            if (!SpaceshipFactory.spaceshipTemplates.ContainsKey(templateName)
+                && !customSpaceshipTemplates.ContainsKey(templateName))
+            {
+                return "CANNOT_ADD_TEMPLATE";
+            }
+
+            customSpaceshipTemplates.Add(templateName, part);
+            return $"TEMPLATE {templateName} ADDED";
         }
 
         public string RemoveSpaceships(Dictionary<string, int> order)

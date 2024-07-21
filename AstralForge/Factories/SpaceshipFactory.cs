@@ -5,7 +5,7 @@ namespace AstralForge.Factories;
 
 public static class SpaceshipFactory
 {
-    private static readonly Dictionary<string, List<Part>> spaceshipTemplates = new()
+    public static readonly Dictionary<string, List<Part>> spaceshipTemplates = new()
     {
         {
             "Explorer", new List<Part>

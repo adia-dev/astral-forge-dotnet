@@ -27,6 +27,7 @@ public class Parser
         { "INSTRUCTIONS", () => new AssemblyInstructionsCommand(new Dictionary<string, int>()).ShowUsage() },
         { "VERIFY", () => new VerifyCommand(new Dictionary<string, int>()).ShowUsage() },
         { "PRODUCE", () => new ProduceCommand(new Dictionary<string, int>()).ShowUsage() },
+        { "RECEIVE", () => new ReceiveCommand(new List<Part>()).ShowUsage() },
         { "GET_MOVEMENTS", () => new GetMovementsCommand().ShowUsage() },
         { "SEND", () => new SendCommand(new Dictionary<string, int>()).ShowUsage() },
     };
