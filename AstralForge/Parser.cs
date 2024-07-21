@@ -15,6 +15,7 @@ public class Parser
         { "VERIFY", tokens => new VerifyCommand(ParseOrderTokens(tokens)) },
         { "PRODUCE", tokens => new ProduceCommand(ParseOrderTokens(tokens)) },
         { "RECEIVE", tokens => new ReceiveCommand(ParsePartsTokens(tokens)) },
+        { "GET_MOVEMENTS", tokens => new GetMovementsCommand() },
         { "SEND", tokens => new SendCommand(ParseOrderTokens(tokens)) },
         { "HELP", tokens => new HelpCommand(tokens) }
     };
@@ -26,6 +27,7 @@ public class Parser
         { "INSTRUCTIONS", () => new AssemblyInstructionsCommand(new Dictionary<string, int>()).ShowUsage() },
         { "VERIFY", () => new VerifyCommand(new Dictionary<string, int>()).ShowUsage() },
         { "PRODUCE", () => new ProduceCommand(new Dictionary<string, int>()).ShowUsage() },
+        { "GET_MOVEMENTS", () => new GetMovementsCommand().ShowUsage() },
         { "SEND", () => new SendCommand(new Dictionary<string, int>()).ShowUsage() },
     };
 

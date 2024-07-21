@@ -15,6 +15,7 @@ namespace AstralForge.Models
     {
         private readonly Dictionary<string, Part> parts = new();
         private readonly List<Spaceship> spaceships = new();
+        private readonly List<string> movements = new();
 
         public void AddPart(PartType type, string name, int quantity)
         {
@@ -26,11 +27,26 @@ namespace AstralForge.Models
             {
                 parts[name] = new Part(type, name, quantity);
             }
+
+            AddMovement($"Added {quantity} {name}");
         }
 
         public string GetStockLevels()
         {
             return string.Join(Environment.NewLine, parts.Select(p => $"{p.Value.Quantity} {p.Key}"));
+        }
+
+        public void GetMovements()
+        {
+            foreach (var movement in movements)
+            {
+                Console.WriteLine(movement);
+            }
+        }
+
+        private void AddMovement(string movement)
+        {
+            movements.Add(movement);
         }
 
         public void AddSpaceship(string name, int quantity)
@@ -39,6 +55,10 @@ namespace AstralForge.Models
             {
                 spaceships.Add(SpaceshipFactory.CreateSpaceship(name));
             }
+
+            AddMovement($"Added {quantity} {name}");
+        }
+
         }
 
         public string RemoveSpaceships(Dictionary<string, int> order)
@@ -53,22 +73,19 @@ namespace AstralForge.Models
 
             foreach (var item in order)
             {
-                RemoveSpaceship(item.Key, item.Value);
-            }
-
-            return "STOCK_UPDATED";
-        }
-
-        public void RemoveSpaceship(string name, int quantity)
-        {
-            for (int i = 0; i < quantity; i++)
-            {
-                var spaceship = spaceships.FirstOrDefault(s => s.Name == name);
-                if (spaceship != null)
+                for (int i = 0; i < item.Value; i++)
                 {
-                    spaceships.Remove(spaceship);
+                    var spaceship = spaceships.FirstOrDefault(s => s.Name == item.Key);
+                    if (spaceship != null)
+                    {
+                        spaceships.Remove(spaceship);
+                    }
                 }
             }
+
+            AddMovement($"Removed {order.Count} spaceships");
+
+            return "STOCK_UPDATED";
         }
 
         public string GetStock()
@@ -177,6 +194,8 @@ namespace AstralForge.Models
                 CompleteSpaceshipOrder(item.Key, item.Value);
             }
 
+            AddMovement($"Produced {order.Count} spaceships");
+
             return "STOCK_UPDATED";
         }
 
@@ -201,9 +220,12 @@ namespace AstralForge.Models
                 if (parts.ContainsKey(part.Name))
                 {
                     parts[part.Name] = new Part(part.Type, part.Name, parts[part.Name].Quantity - part.Quantity * quantity);
+                    AddMovement($"Used {part.Quantity * quantity} {part.Name}");
                 }
             }
             AddSpaceship(name, quantity);
+
+            AddMovement($"Produced {quantity} {name}");
         }
 
         // Méthode Accept pour le pattern Visiteur

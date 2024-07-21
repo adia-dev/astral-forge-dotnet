@@ -15,6 +15,7 @@ public class Lexer
         { "PRODUCE", TokenType.Command },
         { "RECEIVE", TokenType.Command },
         { "SEND", TokenType.Command },
+        { "GET_MOVEMENTS", TokenType.Command },
         { "HELP", TokenType.Command }
     };
 
