@@ -52,6 +52,40 @@ namespace AstralForge.Tests.Models
         }
 
         [Test]
+        public void RemoveSpaceships_ShouldRemoveSpaceshipsFromInventory()
+        {
+            // Arrange
+            var inventory = new Inventory();
+            inventory.AddSpaceship("Explorer", 2);
+            inventory.AddSpaceship("Speeder", 1);
+
+            // Act
+            inventory.RemoveSpaceships("Explorer", 1);
+
+            // Assert
+            var stockReport = inventory.GetStock();
+            Assert.That(stockReport, Does.Contain("Explorer"));
+            Assert.That(stockReport, Does.Contain("Speeder"));
+        }
+
+        [Test]
+        public void RemoveSpaceships_ShouldRemoveAllSpaceshipsFromInventory()
+        {
+            // Arrange
+            var inventory = new Inventory();
+            inventory.AddSpaceship("Explorer", 2);
+            inventory.AddSpaceship("Speeder", 1);
+
+            // Act
+            inventory.RemoveSpaceships("Explorer", 2);
+
+            // Assert
+            var stockReport = inventory.GetStock();
+            Assert.That(stockReport, Does.Not.Contain("Explorer"));
+            Assert.That(stockReport, Does.Contain("Speeder"));
+        }
+
+        [Test]
         public void GetStock_ShouldReturnCorrectStock()
         {
             // Arrange

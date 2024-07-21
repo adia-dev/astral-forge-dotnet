@@ -14,6 +14,7 @@ public class Lexer
         { "VERIFY", TokenType.Command },
         { "PRODUCE", TokenType.Command },
         { "RECEIVE", TokenType.Command },
+        { "SEND", TokenType.Command },
         { "HELP", TokenType.Command }
     };
 

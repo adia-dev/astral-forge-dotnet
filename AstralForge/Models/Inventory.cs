@@ -41,6 +41,36 @@ namespace AstralForge.Models
             }
         }
 
+        public string RemoveSpaceships(Dictionary<string, int> order)
+        {
+            foreach (var item in order)
+            {
+                if (!CheckSpaceshipOrder(item.Key, item.Value))
+                {
+                    return $"ERROR Not enough {item.Key} in stock.";
+                }
+            }
+
+            foreach (var item in order)
+            {
+                RemoveSpaceship(item.Key, item.Value);
+            }
+
+            return "STOCK_UPDATED";
+        }
+
+        public void RemoveSpaceship(string name, int quantity)
+        {
+            for (int i = 0; i < quantity; i++)
+            {
+                var spaceship = spaceships.FirstOrDefault(s => s.Name == name);
+                if (spaceship != null)
+                {
+                    spaceships.Remove(spaceship);
+                }
+            }
+        }
+
         public string GetStock()
         {
             var stockReport = new StringBuilder();

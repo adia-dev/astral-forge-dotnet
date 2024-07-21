@@ -16,6 +16,7 @@ namespace AstralForge
             { "VERIFY", tokens => new VerifyCommand(ParseOrderTokens(tokens)) },
             { "PRODUCE", tokens => new ProduceCommand(ParseOrderTokens(tokens)) },
             { "RECEIVE", tokens => new ReceiveCommand(ParsePartsTokens(tokens)) },
+            { "SEND", tokens => new SendCommand(ParseOrderTokens(tokens)) },
             { "HELP", tokens => new HelpCommand(tokens) } // Add help command
         };
 
