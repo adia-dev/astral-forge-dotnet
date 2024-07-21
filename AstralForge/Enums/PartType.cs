@@ -5,5 +5,6 @@ public enum PartType
     Hull,
     Engine,
     Wings,
-    Thruster
+    Thruster,
+    Unknown
 }

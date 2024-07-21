@@ -1,6 +1,8 @@
 using AstralForge.Commands;
 using AstralForge.Enums;
 using AstralForge.Models;
+using AstralForge.Utils;
+
 
 namespace AstralForge
 {
@@ -27,15 +29,29 @@ namespace AstralForge
 
             if (args.Length > 0)
             {
-                var cli = new CLI(inventory, lexer, parser);
-                cli.Run(args);
+                if (args[0] == "load") 
+                {
+                    inventory = FileManager.LoadFromFile(args[1]); 
+                    Console.WriteLine("Inventory loaded from file."); 
+                }
+                else if (args[0] == "save") 
+                {
+                    FileManager.SaveToFile(args[1], inventory); 
+                    Console.WriteLine("Inventory saved to file."); 
+                }
+                else
+                {
+                    var cli = new CLI(inventory, lexer, parser); 
+                    cli.Run(args); 
+                }
             }
             else
             {
-                var repl = new REPL(inventory, lexer, parser);
-                repl.Start();
+                var repl = new REPL(inventory, lexer, parser); 
+                repl.Start(); // Démarre le REPL
             }
         }
+
 
         private static void AddInitialStock(Inventory inventory)
         {
@@ -107,9 +123,9 @@ namespace AstralForge
         private static PartType GetPartType(string name)
         {
             return name.Contains("Engine") ? PartType.Engine :
-                   name.Contains("Wings") ? PartType.Wings :
-                   name.Contains("Thruster") ? PartType.Thruster :
-                   PartType.Hull;
+                name.Contains("Wings") ? PartType.Wings :
+                name.Contains("Thruster") ? PartType.Thruster :
+                PartType.Hull;
         }
     }
 }

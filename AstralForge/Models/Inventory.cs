@@ -4,6 +4,7 @@ using AstralForge.Factories;
 
 namespace AstralForge.Models;
 
+[Serializable]
 public class Inventory
 {
     private readonly Dictionary<string, Part> parts = new();
@@ -19,6 +20,10 @@ public class Inventory
         {
             parts[name] = new Part(type, name, quantity);
         }
+    }
+    public string GetStockLevels()
+    {
+        return string.Join(Environment.NewLine, parts.Select(p => $"{p.Value.Quantity} {p.Key}"));
     }
 
     public void AddSpaceship(string name, int quantity)

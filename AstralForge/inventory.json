@@ -1,0 +1,16 @@
+﻿{
+  "parts": [
+    { "Type": "Hull", "Name": "Hull_HE1", "Quantity": 10 },
+    { "Type": "Hull", "Name": "Hull_HS1", "Quantity": 10 },
+    { "Type": "Hull", "Name": "Hull_HC1", "Quantity": 10 },
+    { "Type": "Engine", "Name": "Engine_EE1", "Quantity": 10 },
+    { "Type": "Engine", "Name": "Engine_ES1", "Quantity": 10 },
+    { "Type": "Engine", "Name": "Engine_EC1", "Quantity": 10 },
+    { "Type": "Wings", "Name": "Wings_WE1", "Quantity": 10 },
+    { "Type": "Wings", "Name": "Wings_WS1", "Quantity": 10 },
+    { "Type": "Wings", "Name": "Wings_WC1", "Quantity": 10 },
+    { "Type": "Thruster", "Name": "Thruster_TE1", "Quantity": 10 },
+    { "Type": "Thruster", "Name": "Thruster_TS1", "Quantity": 10 },
+    { "Type": "Thruster", "Name": "Thruster_TC1", "Quantity": 10 }
+  ]
+}
