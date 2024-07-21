@@ -1,8 +1,8 @@
-﻿using NUnit.Framework;
+﻿using System.IO;
+using AstralForge.Enums;
 using AstralForge.Models;
 using AstralForge.Utils;
-using System.IO;
-using AstralForge.Enums;
+using NUnit.Framework;
 
 namespace AstralForge.Tests.Utils
 {
@@ -45,7 +45,8 @@ namespace AstralForge.Tests.Utils
         {
             // Arrange
             var filePath = "test_inventory.xml";
-            File.WriteAllText(filePath, "<Inventory><parts><Part><Type>Hull</Type><Name>Hull_HE1</Name><Quantity>10</Quantity></Part></parts></Inventory>");
+            File.WriteAllText(filePath,
+                "<Inventory><parts><Part><Type>Hull</Type><Name>Hull_HE1</Name><Quantity>10</Quantity></Part></parts></Inventory>");
 
             // Act
             var inventory = FileManager.LoadFromFile(filePath);
