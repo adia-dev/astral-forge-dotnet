@@ -29,20 +29,20 @@ namespace AstralForge
 
             if (args.Length > 0)
             {
-                if (args[0] == "load") 
+                if (args[0] == "load")
                 {
-                    inventory = FileManager.LoadFromFile(args[1]); 
-                    Console.WriteLine("Inventory loaded from file."); 
+                    inventory = FileManager.LoadFromFile(args[1]);
+                    Console.WriteLine("Inventory loaded from file.");
                 }
-                else if (args[0] == "save") 
+                else if (args[0] == "save")
                 {
-                    FileManager.SaveToFile(args[1], inventory); 
-                    Console.WriteLine("Inventory saved to file."); 
+                    FileManager.SaveToFile(args[1], inventory);
+                    Console.WriteLine("Inventory saved to file.");
                 }
                 else
                 {
-                    var cli = new CLI(inventory, lexer, parser); 
-                    cli.Run(args); 
+                    var cli = new CLI(inventory, lexer, parser);
+                    cli.Run(args);
                 }
             }
             else

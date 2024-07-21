@@ -2,6 +2,7 @@
 {
     using System.Xml.Serialization;
     using System.Text.Json;
+    using System.Text.Json.Serialization;
     using System.IO;
     using AstralForge.Models;
     using AstralForge.Enums;
@@ -34,7 +35,11 @@
         private static Inventory LoadFromJson(string filePath)
         {
             var json = File.ReadAllText(filePath);
-            return JsonSerializer.Deserialize<Inventory>(json);
+            return JsonSerializer.Deserialize<Inventory>(json, new JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = true,
+                Converters = { new JsonStringEnumConverter(JsonNamingPolicy.CamelCase) }
+            });
         }
 
         private static Inventory LoadFromXml(string filePath)
@@ -63,40 +68,24 @@
         public static void SaveToFile(string filePath, Inventory inventory)
         {
             var fileExtension = Path.GetExtension(filePath);
+            ISaveVisitor visitor;
 
             switch (fileExtension)
             {
                 case ".json":
-                    SaveToJson(filePath, inventory);
+                    visitor = new SaveVisitorJson(filePath);
                     break;
                 case ".xml":
-                    SaveToXml(filePath, inventory);
+                    visitor = new SaveVisitorXml(filePath);
                     break;
                 case ".txt":
-                    SaveToText(filePath, inventory);
+                    visitor = new SaveVisitorText(filePath);
                     break;
                 default:
                     throw new NotSupportedException("File format not supported.");
             }
-        }
 
-        private static void SaveToJson(string filePath, Inventory inventory)
-        {
-            var json = JsonSerializer.Serialize(inventory);
-            File.WriteAllText(filePath, json);
-        }
-
-        private static void SaveToXml(string filePath, Inventory inventory)
-        {
-            var serializer = new XmlSerializer(typeof(Inventory));
-            using var writer = new StreamWriter(filePath);
-            serializer.Serialize(writer, inventory);
-        }
-
-        private static void SaveToText(string filePath, Inventory inventory)
-        {
-            var lines = inventory.GetStockLevels().Split(Environment.NewLine);
-            File.WriteAllLines(filePath, lines);
+            inventory.Accept(visitor);
         }
     }
 }
