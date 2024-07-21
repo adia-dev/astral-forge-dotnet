@@ -19,5 +19,11 @@ public class ReceiveCommand : ICommand
         }
         Console.WriteLine("Stock updated with received items.");
     }
-}
 
+    public void ShowUsage()
+    {
+        Console.WriteLine("Usage: RECEIVE A Part1, B Part2, ...");
+        Console.WriteLine("Example: RECEIVE 10 Hull_HE1, 5 Engine_EE1");
+        Console.WriteLine("Description: Adds the specified quantities of parts to the inventory.");
+    }
+}

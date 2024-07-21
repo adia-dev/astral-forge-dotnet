@@ -15,5 +15,11 @@ public class ProduceCommand : ICommand
     {
         Console.WriteLine(inventory.ProduceOrder(_order));
     }
-}
 
+    public void ShowUsage()
+    {
+        Console.WriteLine("Usage: PRODUCE A Vaisseau1, B Vaisseau2, ...");
+        Console.WriteLine("Example: PRODUCE 1 Explorer");
+        Console.WriteLine("Description: Produces the specified quantities of spaceships, updating the stock accordingly.");
+    }
+}

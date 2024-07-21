@@ -15,4 +15,11 @@ public class VerifyCommand : ICommand
     {
         Console.WriteLine(inventory.VerifyOrder(_order));
     }
+
+    public void ShowUsage()
+    {
+        Console.WriteLine("Usage: VERIFY A Vaisseau1, B Vaisseau2, ...");
+        Console.WriteLine("Example: VERIFY 1 Explorer");
+        Console.WriteLine("Description: Checks if the specified quantities of spaceships can be produced with the current stock.");
+    }
 }
