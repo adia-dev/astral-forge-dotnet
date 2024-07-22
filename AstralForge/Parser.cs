@@ -15,9 +15,12 @@ public class Parser
         { "VERIFY", tokens => new VerifyCommand(ParseOrderTokens(tokens)) },
         { "PRODUCE", tokens => new ProduceCommand(ParseOrderTokens(tokens)) },
         { "RECEIVE", tokens => new ReceiveCommand(ParsePartsTokens(tokens)) },
-        { "HELP", tokens => new HelpCommand(tokens) },
-        { "ASSEMBLE", tokens => new AssembleCommand(tokens[1].Value, tokens.Skip(2).Select(t => t.Value).ToList()) },
-        { "GET_OUT_STOCK", tokens => new GetOutStockCommand(tokens[2].Value, int.Parse(tokens[1].Value)) }
+        { "SEND", tokens => new SendCommand(ParseOrderTokens(tokens)) },
+        { "GET_MOVEMENTS", tokens => new GetMovementsCommand() },
+        { "ADD_TEMPLATE", tokens => new AddTemplateCommand(tokens[1], ParseAddTemplateTokens(tokens)) },
+        { "SAVE", tokens => new SaveCommand(tokens[1].Value) },
+        { "LOAD", tokens => new LoadCommand(tokens[1].Value) },
+        { "HELP", tokens => new HelpCommand(tokens) }
     };
 
     public static readonly Dictionary<string, Action> CommandUsages = new()
@@ -28,8 +31,12 @@ public class Parser
         { "VERIFY", () => new VerifyCommand(new Dictionary<string, int>()).ShowUsage() },
         { "PRODUCE", () => new ProduceCommand(new Dictionary<string, int>()).ShowUsage() },
         { "RECEIVE", () => new ReceiveCommand(new List<Part>()).ShowUsage() },
-        { "ASSEMBLE", () => new AssembleCommand("", new List<string>()).ShowUsage() },
-        { "GET_OUT_STOCK", () => new GetOutStockCommand("", 0).ShowUsage() }
+        { "SEND", () => new SendCommand(new Dictionary<string, int>()).ShowUsage() },
+        { "GET_MOVEMENTS", () => new GetMovementsCommand().ShowUsage() },
+        { "ADD_TEMPLATE", () => new AddTemplateCommand(new Token(TokenType.PartName, "Template"), new List<Part>()).ShowUsage() },
+        { "SAVE", () => new SaveCommand("").ShowUsage() },
+        { "LOAD", () => new LoadCommand("").ShowUsage() },
+        { "HELP", () => new HelpCommand(new List<Token>()).ShowUsage() }
     };
 
     public ICommand Parse(List<Token> tokens)
@@ -73,6 +80,11 @@ public class Parser
     private static Dictionary<string, int> ParseOrderTokens(List<Token> tokens)
     {
         return ParseTokens(tokens.GetRange(1, tokens.Count - 1), TokenType.PartName);
+    }
+    
+    private static List<Part> ParseAddTemplateTokens(List<Token> tokens)
+    {
+        return ParsePartsTokens(tokens.GetRange(2, tokens.Count - 2));
     }
 
     private static List<Part> ParsePartsTokens(List<Token> tokens)

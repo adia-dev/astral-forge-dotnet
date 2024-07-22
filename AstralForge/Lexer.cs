@@ -17,7 +17,9 @@ public class Lexer
         { "SEND", TokenType.Command },
         { "GET_MOVEMENTS", TokenType.Command },
         { "HELP", TokenType.Command },
-        { "ADD_TEMPLATE", TokenType.Command }
+        { "ADD_TEMPLATE", TokenType.Command },
+        { "SAVE", TokenType.Command },
+        { "LOAD", TokenType.Command }
     };
 
     public List<Token> Tokenize(string input)
@@ -56,7 +58,7 @@ public class Lexer
 
         if (char.IsLetter(input[position]))
         {
-            while (position < input.Length && (char.IsLetterOrDigit(input[position]) || input[position] == '_'))
+            while (position < input.Length && (char.IsLetterOrDigit(input[position]) || input[position] == '_' || input[position] == '.'))
             {
                 sb.Append(input[position]);
                 position++;

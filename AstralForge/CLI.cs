@@ -36,9 +36,9 @@ namespace AstralForge
                 Console.WriteLine($"Error: {ex.Message}");
                 Console.ResetColor();
                 var commandName = input.Split(' ')[0].ToUpper();
-                if (Parser.CommandParsers.TryGetValue(commandName, out var commandParser))
+                if (Parser.CommandUsages.TryGetValue(commandName, out var showUsage))
                 {
-                    commandParser(new List<Token>()).ShowUsage();
+                    showUsage();
                 }
                 else
                 {

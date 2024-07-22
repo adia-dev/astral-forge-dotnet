@@ -252,18 +252,57 @@ namespace AstralForge.Models
             return false;
         }
 
-        // TODO: Implement assembling in multiples parts
-        // Maybe introduce a max number of parts an assembly can have at the same time
         public void AddAssembledItem(string assemblyName, List<string> partNames)
         {
             parts[assemblyName] = new Part(PartType.Assembled, assemblyName, 1);
             AddMovement($"Assembled {assemblyName} from parts: {string.Join(", ", partNames)}");
         }
 
-        // Méthode Accept pour le pattern Visiteur
         public void Accept(ISaveVisitor visitor)
         {
             visitor.Visit(this);
+        }
+
+        public void Merge(Inventory other)
+        {
+            foreach (var part in other.parts.Values)
+            {
+                AddPart(part.Type, part.Name, part.Quantity);
+            }
+
+            foreach (var spaceship in other.spaceships)
+            {
+                AddSpaceship(spaceship.Name, 1);
+            }
+
+            foreach (var template in other.customSpaceshipTemplates)
+            {
+                if (!customSpaceshipTemplates.ContainsKey(template.Key))
+                {
+                    customSpaceshipTemplates[template.Key] = template.Value;
+                }
+                else
+                {
+                    var existingParts = customSpaceshipTemplates[template.Key];
+                    foreach (var part in template.Value)
+                    {
+                        var existingPart = existingParts.FirstOrDefault(p => p.Name == part.Name);
+                        if (existingPart == null)
+                        {
+                            existingParts.Add(part);
+                        }
+                        else
+                        {
+                            existingParts[existingParts.IndexOf(existingPart)] = new Part(existingPart.Type, existingPart.Name, existingPart.Quantity + part.Quantity);
+                        }
+                    }
+                }
+            }
+
+            foreach (var movement in other.movements)
+            {
+                AddMovement(movement);
+            }
         }
     }
 }
