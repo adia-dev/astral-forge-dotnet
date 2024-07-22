@@ -15,9 +15,9 @@ public class Parser
         { "VERIFY", tokens => new VerifyCommand(ParseOrderTokens(tokens)) },
         { "PRODUCE", tokens => new ProduceCommand(ParseOrderTokens(tokens)) },
         { "RECEIVE", tokens => new ReceiveCommand(ParsePartsTokens(tokens)) },
-        { "GET_MOVEMENTS", tokens => new GetMovementsCommand() },
-        { "SEND", tokens => new SendCommand(ParseOrderTokens(tokens)) },
-        { "HELP", tokens => new HelpCommand(tokens) }
+        { "HELP", tokens => new HelpCommand(tokens) },
+        { "ASSEMBLE", tokens => new AssembleCommand(tokens[1].Value, tokens.Skip(2).Select(t => t.Value).ToList()) },
+        { "GET_OUT_STOCK", tokens => new GetOutStockCommand(tokens[2].Value, int.Parse(tokens[1].Value)) }
     };
 
     public static readonly Dictionary<string, Action> CommandUsages = new()
@@ -28,8 +28,8 @@ public class Parser
         { "VERIFY", () => new VerifyCommand(new Dictionary<string, int>()).ShowUsage() },
         { "PRODUCE", () => new ProduceCommand(new Dictionary<string, int>()).ShowUsage() },
         { "RECEIVE", () => new ReceiveCommand(new List<Part>()).ShowUsage() },
-        { "GET_MOVEMENTS", () => new GetMovementsCommand().ShowUsage() },
-        { "SEND", () => new SendCommand(new Dictionary<string, int>()).ShowUsage() },
+        { "ASSEMBLE", () => new AssembleCommand("", new List<string>()).ShowUsage() },
+        { "GET_OUT_STOCK", () => new GetOutStockCommand("", 0).ShowUsage() }
     };
 
     public ICommand Parse(List<Token> tokens)

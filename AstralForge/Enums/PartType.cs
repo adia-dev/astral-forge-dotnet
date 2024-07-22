@@ -6,5 +6,6 @@ public enum PartType
     Engine,
     Wings,
     Thruster,
+    Assembled,
     Unknown
 }

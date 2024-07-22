@@ -1,9 +1,4 @@
-using System;
-using System.Collections.Generic;
 using System.Text;
-using System.Xml.Serialization;
-using System.Text.Json.Serialization;
-using System.Linq;
 using AstralForge.Enums;
 using AstralForge.Factories;
 using AstralForge.Utils;
@@ -60,7 +55,7 @@ namespace AstralForge.Models
             AddMovement($"Added {quantity} {name}");
         }
 
-        public string AddTemplate(string templateName, List<Part> part)
+        public string AddTemplate(string templateName, List<Part> parts)
         {
             if (!SpaceshipFactory.spaceshipTemplates.ContainsKey(templateName)
                 && !customSpaceshipTemplates.ContainsKey(templateName))
@@ -68,7 +63,7 @@ namespace AstralForge.Models
                 return "CANNOT_ADD_TEMPLATE";
             }
 
-            customSpaceshipTemplates.Add(templateName, part);
+            customSpaceshipTemplates.Add(templateName, parts);
             return $"TEMPLATE {templateName} ADDED";
         }
 
@@ -170,6 +165,8 @@ namespace AstralForge.Models
                         instructions.AppendLine($"GET_OUT_STOCK {part.Quantity} {part.Name}");
                     }
 
+                    instructions.AppendLine($"ASSEMBLE {item.Key} {string.Join(' ', spaceship.PartsRequirements.Select(p => p.Name))}");
+
                     instructions.AppendLine($"FINISHED {item.Key}");
                 }
             }
@@ -237,6 +234,30 @@ namespace AstralForge.Models
             AddSpaceship(name, quantity);
 
             AddMovement($"Produced {quantity} {name}");
+        }
+
+        public bool CheckPartAvailability(string partName)
+        {
+            return parts.ContainsKey(partName) && parts[partName].Quantity > 0;
+        }
+
+        public bool UsePart(string partName, int quantity = 1)
+        {
+            if (parts.ContainsKey(partName) && parts[partName].Quantity >= quantity)
+            {
+                parts[partName] = new Part(parts[partName].Type, partName, parts[partName].Quantity - quantity);
+                AddMovement($"Used {quantity} {partName}");
+                return true;
+            }
+            return false;
+        }
+
+        // TODO: Implement assembling in multiples parts
+        // Maybe introduce a max number of parts an assembly can have at the same time
+        public void AddAssembledItem(string assemblyName, List<string> partNames)
+        {
+            parts[assemblyName] = new Part(PartType.Assembled, assemblyName, 1);
+            AddMovement($"Assembled {assemblyName} from parts: {string.Join(", ", partNames)}");
         }
 
         // Méthode Accept pour le pattern Visiteur
